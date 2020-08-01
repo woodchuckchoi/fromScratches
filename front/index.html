@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<span v-if="visible">
+			{{ message }}
+			</span>
+			<ol>
+				<li v-for="arr in array">
+					{{ arr }}
+				</li>
+			</ol>
+			<input v-model="myModel">
+			<button v-on:click="myMethod">Click!</button>
+			<todo-item
+				v-for="item in groceryList"
+				v-bind:todo="item"
+				v-bind:key="item.id">
+			</todo-item>
+		</div>
+		
+		<script src="index.js"></script>
+	</body>
+</html>
