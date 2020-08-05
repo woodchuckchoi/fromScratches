@@ -1,12 +1,24 @@
+<!DOCTYPE html>
 <html>
 	<head>
+		<link rel="stylesheet" type="text/css" href="style.css">
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	</head>
 	<body>
-		<div id="app">
-			<span v-if="visible">
-			{{ message }}
+		<div class="sidenav">
+			<a href="#">About</a>
+			<a href="#">Words</a>
+		</div>
+		<div class="main" id="app">
+			<span v-if="status[0]">
+				status[0]
+			</span>
+			<span v-if="status[1]">
+				status[1]
+			</span>
+			<span v-if="status[2]">
+				status[2]
 			</span>
 			<ol>
 				<li v-for="arr in array">
@@ -15,11 +27,11 @@
 			</ol>
 			<input v-model="myModel">
 			<button v-on:click="myMethod">Click!</button>
-			<todo-item
-				v-for="item in groceryList"
-				v-bind:todo="item"
-				v-bind:key="item.id">
-			</todo-item>
+			<articles
+				v-for="writing in writings"
+				v-bind:article="writing"
+				v-bind:key="writing.id">
+			</articles>
 		</div>
 		
 		<script src="index.js"></script>

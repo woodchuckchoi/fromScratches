@@ -1,32 +1,21 @@
-Vue.component('todo-item', {
-	props: ['todo'],
-	template: '<li>{{ todo.text }}</li>'
+const config = require("./config.js")
+
+Vue.component('articles', {
+	props: ['article'],
+	template: '<li>{{ article.title }}</li>'
 })
 
 var app = new Vue({
 	el: '#app',
 	data: {
-		message: 'Hello Hyuck!',
-		visible: true,
-		array: ['first', 'second', 'third'],
-		myModel: 'on',
-		groceryList: [
-			{ id: 0, text: 'Vegetables' },
-			{ id: 1, text: 'Cheese' },
-			{ id: 2, text: 'Gum'}
-		]
+		writings: [],
+		status: [false, true, false]
 	},
-	methods: {
-		myMethod: function() {
-			axios
-				.get('http://localhost:7777', {
-					headers: {
-						origin: "http://localhost:8080",
-					}
-				})
-				.then(response => (console.log(response)))
-		}
+	created: function() {
+		console.log(config.uri)
+		axios
+			.get(config.uri)
+			.then(response => (this.writings = response.data))
 	}
 });
 
-app.message = "Now I changed the data!";
