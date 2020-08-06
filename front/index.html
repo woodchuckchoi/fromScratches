@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="./css/style.css">
 		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	</head>
 	<body>
 		<div class="sidenav">
-			<a href="#">About</a>
-			<a href="#">Words</a>
+			<a v-on:click="about">About</a>
+			<a v-on:click="words">Words</a>
 		</div>
 		<div class="main" id="app">
 			<span v-if="status[0]">
 				status[0]
 			</span>
 			<span v-if="status[1]">
+				<ol>
+					<li v-for="writing in writings">
+						{{ writing.date }}
+						{{ writing.title }}
+						{{ writing.content }}
+					</li>
+				</ol>
 				status[1]
 			</span>
 			<span v-if="status[2]">
 				status[2]
 			</span>
-			<ol>
-				<li v-for="arr in array">
-					{{ arr }}
-				</li>
-			</ol>
-			<input v-model="myModel">
-			<button v-on:click="myMethod">Click!</button>
 			<articles
 				v-for="writing in writings"
 				v-bind:article="writing"
@@ -34,6 +34,6 @@
 			</articles>
 		</div>
 		
-		<script src="index.js"></script>
+		<script type="module" src="./src/index.js"></script>
 	</body>
 </html>

@@ -1,4 +1,4 @@
-const config = require("./config.js")
+import { config } from "./config.js"
 
 Vue.component('articles', {
 	props: ['article'],
@@ -11,8 +11,14 @@ var app = new Vue({
 		writings: [],
 		status: [false, true, false]
 	},
+	methods : {
+		about: function (event) {
+		},
+		words: function (event) {
+		}
+	},
 	created: function() {
-		console.log(config.uri)
+		console.log(config.back)
 		axios
 			.get(config.uri)
 			.then(response => (this.writings = response.data))
