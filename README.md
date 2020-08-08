@@ -1,4 +1,4 @@
-# *Blog from scratches by Woodchuckchoi*
+# *devQueue by Woodchuckchoi*
 
 **Front** - Vue.js (+Axios)
 
@@ -7,3 +7,5 @@
 **DB** - MariaDB, Redis
 
 Each component will be containerised w/ Docker and, eventually, orchestrated w/ K8S for Service discovery and orchestration purposes.
+
+### blog.naver.com/dngur1206
