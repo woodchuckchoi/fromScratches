@@ -9,13 +9,6 @@ from sanic.response import json
 from samaria import Samaria
 from utils import importConfig
 
-'''
-    "DB_SERVICE":   "0.0.0.0",
-    "DB_USER":      "root",
-    "DB_PASS":      "worbdj12",
-    "DB_DATABASE":  "devqueue"
-'''
-
 if __name__ == "__main__":
     HOST, USER, PASS, DATABASE = importConfig()
 
@@ -30,9 +23,6 @@ if __name__ == "__main__":
 
     @app.route('/login', methods=['POST'])
     async def login(request):
-        if request.method != 'POST':
-            return json(status=404)
-
         loginId = request.json['loginId']
         loginPw = request.json['loginPw']
 
