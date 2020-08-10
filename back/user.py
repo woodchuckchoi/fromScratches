@@ -22,7 +22,7 @@ if __name__ == "__main__":
     @app.listener('before_server_start')
     async def redis_init(app, loop):
         app.redis   = await aioredis.create_redis_pool((REDIS_HOST, REDIS_PORT))
-        redisSession.init_app(app, interface=AIORedisSessionInterface(app.redis, expiry=21600, sessioncookie=True))
+        redisSession.init_app(app, interface=AIORedisSessionInterface(app.redis, expiry=43200))
 
     def check_auth(request):
         if request.ctx.session.get('devQueueId') and request.ctx.session.get('devQueueLastLogin'):
@@ -54,5 +54,11 @@ if __name__ == "__main__":
             request.ctx.session['devQueueLastLogin'] = time.strftime("%Y/%m/%d %H:%M:%S")
             return json({"result": True})
         return json({"result": False})
+
+    @app.route('/logout', methods=['GET'])
+    async def logout(request):
+        request.ctx.session['devQueueId'] = None
+        request.ctx.session['devQueueLastLogin'] = None
+        return json('result': True)
 
     app.run(host='0.0.0.0', port=8080, debug=True)
