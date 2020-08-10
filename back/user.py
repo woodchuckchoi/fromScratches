@@ -59,6 +59,6 @@ if __name__ == "__main__":
     async def logout(request):
         request.ctx.session['devQueueId'] = None
         request.ctx.session['devQueueLastLogin'] = None
-        return json('result': True)
+        return json({'result': True})
 
     app.run(host='0.0.0.0', port=8080, debug=True)
