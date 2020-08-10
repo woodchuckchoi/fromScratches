@@ -1,7 +1,11 @@
 import json
 import os
+import time
 
 CONFIG = './testConfig.json'
+
+def timeNow():
+    return time.strftime("%Y/%m/%d %H:%M:%S")
 
 def importConfig():
     with open(CONFIG, 'r') as f:

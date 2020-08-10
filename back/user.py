@@ -1,7 +1,3 @@
-# Built-in
-import os
-import time
-
 # PIP
 import aioredis
 from sanic import Sanic
@@ -10,7 +6,7 @@ from sanic_session import Session, AIORedisSessionInterface
 
 # Custom
 from samaria import Samaria
-from utils import importConfig
+from utils import importConfig, timeNow
 
 if __name__ == "__main__":
     HOST, USER, PASS, DATABASE, REDIS_HOST, REDIS_PORT = importConfig()
@@ -51,7 +47,7 @@ if __name__ == "__main__":
 
         if ret[0][0]:
             request.ctx.session['devQueueId'] = loginId
-            request.ctx.session['devQueueLastLogin'] = time.strftime("%Y/%m/%d %H:%M:%S")
+            request.ctx.session['devQueueLastLogin'] = timeNow()
             return json({"result": True})
         return json({"result": False})
 
