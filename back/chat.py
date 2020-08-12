@@ -24,3 +24,7 @@ if __name__ == "__main__":
     async def lobby(request, ws):
         rooms = await app.redis.get('rooms')
         return json({'rooms': rooms})
+
+    @app.websocket('/room/subscribe/<room>')
+    async def subscribe(request, ws):
+        raise NotImplementedError
