@@ -1,5 +1,4 @@
 front/template/DevBlog-Theme-master
-env/
+venv/
 test.py
-test*
 *__pycache__*

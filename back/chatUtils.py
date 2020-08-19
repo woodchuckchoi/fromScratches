@@ -1,19 +1,34 @@
+import aioredis
 import json
 
-async def recv_chat(ws, app, origin):
-    room = await app.redis.subscribe('channel:{}'.format(origin))
+class RedisConnection:
+    async def __init__(self, host, port):
+        self.__pool = await aioredis.create_redis_pool(host, port) 
+        self.__connections = {}
+
+    async def get_redis(self):
+        if not self.__pool:
+            await self.connect()
+        return self.__pool
+
+    async def close(self):
+        self.__pool.close()
+        await self.__pool.wait_closed()
+
+async def recvChat(ws, app, origin):
+    while True:
         try:
-            while await room.wait_message():
-                msg = await room.get()
+            while await origin.wait_message():
+                msg = await origin.get()
                 await ws.send(msg)
         
         except Exception as e:
-            ws.send(json.dumps({'message': 'Connection unstable...'}))
+            await ws.send(json.dumps({'message': 'Connection unstable...'}))
         
         finally:
             app.redis.unsubscribe('channel:{}'.format(origin))
 
-async def send_chat(ws, app, dest):
+async def sendChat(ws, app, dest):
     while True:
         try:
             recv = json.loads(await ws.recv())

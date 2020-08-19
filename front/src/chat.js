@@ -1,12 +1,12 @@
 var ws = null;
 
 $(document).ready(() => {
-    ws = new WebSocket("ws://0.0.0.0:8080");
+    ws = new WebSocket("ws://0.0.0.0:8000/");
     ws.onmessage = (event) => {
         console.log(event)
         let data = JSON.parse(event.data);
 
-        $("#chatLog").append("<p><span>"+data["message"]+"</span></p>");
+        $("#chatLog").append("<p><span>"+data["msg"]+"</span></p>");
     }
 });
 

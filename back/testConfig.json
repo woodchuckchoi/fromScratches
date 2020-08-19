@@ -1,0 +1,7 @@
+{
+    "DB_SERVICE": "0.0.0.0", 
+    "DB_USER": "root", 
+    "DB_PASS": "test1234", 
+    "DB_DATABASE": "devqueue", 
+    "REDIS_HOST": "0.0.0.0", 
+    "REDIS_PORT": 6379}
