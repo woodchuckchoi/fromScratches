@@ -1,6 +1,5 @@
 import asyncio
 import aioredis
-import json
 
 from sanic import Sanic
 
