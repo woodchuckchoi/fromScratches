@@ -1,7 +1,7 @@
 var ws = null;
 
 $(document).ready(() => {
-    ws = new WebSocket("ws://0.0.0.0:8000/");
+    ws = new WebSocket("ws://0.0.0.0:8000/chat/test:1");
     ws.onmessage = (event) => {
         console.log(event)
         let data = JSON.parse(event.data);
