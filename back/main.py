@@ -1,6 +1,8 @@
 import asyncio
 import aioredis
 
+import json
+
 from sanic import Sanic
 
 from chat.redis_pub_sub import pub, sub
@@ -26,9 +28,14 @@ async def init_redis(app, loop):
 async def lobby(request, ws):
     while True:
         try:
-            rooms = await aioredis.ConnectionsPool.keys('channel:*')
-            await ws.send(json.dumps({'rooms': rooms})) # this part probably needs editing
-        except:
+            rooms = await app.lobby.pubsub_channels('channel:*')
+            rooms = list(map(lambda x: x.decode('UTF-8'), rooms))
+            await ws.send(json.dumps({'rooms':rooms})) # this part probably needs editing
+            await asyncio.sleep(5)
+        except Exception as e:
+            print(e)
+            # debugging
+    
 
 @app.websocket('/chat/<roomName>')
 async def chat(request, ws, roomName):

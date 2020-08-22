@@ -1,12 +1,17 @@
 var ws = null;
 
 $(document).ready(() => {
-    ws = new WebSocket("ws://0.0.0.0:8000/chat/test:1");
-    ws.onmessage = (event) => {
-        console.log(event)
-        let data = JSON.parse(event.data);
+    // ws = new WebSocket("ws://0.0.0.0:8000/chat/test:1");
+    // ws.onmessage = (event) => {
+    //     console.log(event);
+    //     let data = JSON.parse(event.data);
 
-        $("#chatLog").append("<p><span>"+data["msg"]+"</span></p>");
+    //     $("#chatLog").append("<p><span>"+data["msg"]+"</span></p>");
+    // }
+
+    lobby = new WebSocket("ws://0.0.0.0:8000/lobby");
+    lobby.onmessage = (e) => {
+        console.log(e);
     }
 });
 
