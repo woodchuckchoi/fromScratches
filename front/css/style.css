@@ -1,3 +1,25 @@
+.chatLog {
+  border: double;
+  height: 30em;
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.chatInput {
+  width: 100%;
+  margin: none;
+  display: flex;
+}
+
+#chatConsole {
+  width: 85%;
+  height: auto;
+}
+
+#sendButton {
+  width: 15%;
+}
+
 .sidenav {
   height: 100%; /* Full-height: remove this if you want "auto" height */
   width: 160px; /* Set the width of the sidebar */

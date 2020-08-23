@@ -5,12 +5,15 @@ from sanic import Sanic
 
 from chat.redis_pub_sub import pub, sub
 
+from utils import importConfig
+
 app = Sanic(__name__)
+_, _, _, _, REDIS_HOST, REDIS_PORT = importConfig()
 
 @app.listener('before_server_start')
 async def init_redis(app, loop):
-    app.pub = await aioredis.create_redis_pool(('0.0.0.0', 6379))
-    app.sub = await aioredis.create_redis_pool(('0.0.0.0', 6379))
+    app.pub = await aioredis.create_redis_pool((REDIS_HOST, REDIS_PORT))
+    app.sub = await aioredis.create_redis_pool((REDIS_HOST, REDIS_PORT))
 
     app.connections = set()
 

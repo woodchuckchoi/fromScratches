@@ -1,12 +1,19 @@
-<html>
+<!DOCTYPE html>
+<html lang="kr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="vieport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="css/style.css">
+    </head>
     <body>
-        <p>
+        <div class="chatLog">
             <span name="chatLog" id="chatLog" cols="60" rows="20"></span>
-        </p>
-        <p id="userInput">
+        </div>
+        <div class="chatInput">
             <input type="text" name="chatConsole" id="chatConsole" >
-        </p>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script>
+            <button id="sendButton">Send</button>
+        </div>
+        <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script> -->
         <script src="./src/chat.js"></script>
     </body>
 </html>
