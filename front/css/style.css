@@ -1,8 +1,51 @@
+.title {
+  text-align: center;
+  margin-bottom: 1%;
+  font-family: monospace;
+  font-size: 3em;
+}
+
 .chatLog {
   border: double;
   height: 30em;
   width: 100%;
   margin-bottom: 1em;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
+}
+
+.chatTable {
+  overflow-wrap: break-word;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.chatLog td {
+  overflow-wrap: break-word;
+  padding: 0px;
+  padding-bottom: 0.5em;
+  box-sizing: border-box;
+}
+
+.logName {
+  width: 8%;
+  vertical-align: top;
+  padding: unset;
+}
+
+.logMessage {
+  width: 92%;
+}
+
+.message {
+  margin-top: 0.1em;
+  margin-bottom: 0.1em;
+  margin-left: 0.5em;
+}
+
+#log {
+  overflow;
 }
 
 .chatInput {
