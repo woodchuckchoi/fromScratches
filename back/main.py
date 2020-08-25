@@ -44,7 +44,7 @@ async def lobby(request, ws):
 
 @app.websocket('/chat/<roomName>')
 async def chat(request, ws, roomName):
-    ws.userName = 'Roman Gurkins'
+    ws.userName = 'Roman Gherkins'
 
     if roomName not in app.connections:
         app.connections[roomName] = []
