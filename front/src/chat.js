@@ -8,7 +8,6 @@ const nameLength = 20;
 document.querySelector('.title').innerText = `Room test1`
 
 let ws = new WebSocket(`ws://0.0.0.0:8000/chat/test1`);
-console.log(ws)
 
 ws.onmessage = (e) => {
     const data = JSON.parse(e.data);

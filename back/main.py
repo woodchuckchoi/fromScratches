@@ -36,7 +36,7 @@ async def lobby(request, ws):
             rooms = await app.lobby.pubsub_channels('channel:*')
             rooms = list(map(lambda x: x.decode('UTF-8'), rooms))
             await ws.send(json.dumps({'rooms':rooms})) # this part probably needs editing
-            await asyncio.sleep(5)
+            await asyncio.sleep(30)
         except Exception as e:
             print(e)
             # debugging

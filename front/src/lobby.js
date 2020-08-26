@@ -1,29 +1,44 @@
+let leftBtn = document.querySelector('#leftBtn');
+let rightBtn = document.querySelector('#rightBtn');
+let rows = document.querySelectorAll('#row');
 
+let ws = new WebSocket('ws://0.0.0.0:8000/lobby');
 
-// import { config } from "./config.js"
+let rooms = [];
+let page  = 0;
 
-// Vue.component('articles', {
-// 	props: ['article'],
-// 	template: '<li>{{ article.title }}</li>'
-// })
+ws.onmessage = e => {
+    rooms = [];
+    const data = JSON.parse(e.data);
+    data.rooms.forEach(room => {
+        rooms.push(room);
+    });
+}
 
-// var app = new Vue({
-// 	el: '#app',
-// 	data: {
-// 		writings: [],
-// 		status: [false, true, false]
-// 	},
-// 	methods : {
-// 		about: function (event) {
-// 		},
-// 		words: function (event) {
-// 		}
-// 	},
-// 	created: function() {
-// 		console.log(config.back)
-// 		axios
-// 			.get(config.uri)
-// 			.then(response => (this.writings = response.data))
-// 	}
-// });
+function renderRoom(page) {
+    const start = rows.children.length * 2 * (page-1) + 1;
+    const toShow = rooms.slice(start,start+rows.children.length * 2);
+    
+    for (row of rows) {
+        const twoRooms = toShow.splice(0, 2);
+        let htmlInsert = '';
+        for (room of twoRooms) {
+            htmlInsert += `<td>${room}</td>`
+        }
+        row.innerHTML = htmlInsert;
+    }
+}
 
+leftBtn.addEventListener('click', e => {
+    if (page>0) {
+        page--;
+    }
+    renderRoom(page);
+})
+
+rightBtn.addEventListener('click', e => {
+    if (rooms.length > rows.children.length * 2 * page) {
+        page++;
+    }
+    renderRoom(page);
+})

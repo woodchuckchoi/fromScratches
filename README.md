@@ -1,6 +1,6 @@
 # *devQueue by Woodchuckchoi*
 
-**Front** - Vue.js (+Axios)
+**Front** - Vanilla.JS
 
 **Back** - ~~Go Native (Net)~~ Python Sanic **Go is perfect for micro apps, but I'd love to try Sanic for this one**
 
