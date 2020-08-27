@@ -2,3 +2,4 @@ front/template/DevBlog-Theme-master
 venv/
 test.py
 *__pycache__*
+devqueue_env

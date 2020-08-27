@@ -5,7 +5,12 @@ let rows = document.querySelectorAll('#row');
 let ws = new WebSocket('ws://0.0.0.0:8000/lobby');
 
 let rooms = [];
-let page  = 0;
+let page  = 1;
+let init  = true;
+
+const roomPerPage = 8;
+
+let interval = window.setInterval(renderDefault, 30000);
 
 ws.onmessage = e => {
     rooms = [];
@@ -13,12 +18,19 @@ ws.onmessage = e => {
     data.rooms.forEach(room => {
         rooms.push(room);
     });
+    if (init) {
+        renderDefault();
+    }
+}
+
+function renderDefault() {
+    renderRoom(page);
 }
 
 function renderRoom(page) {
-    const start = rows.children.length * 2 * (page-1) + 1;
-    const toShow = rooms.slice(start,start+rows.children.length * 2);
-    
+    const start = roomPerPage * (page-1);
+    const toShow = rooms.slice(start,start+roomPerPage);
+    console.log(rooms, rooms.slice(start,start+roomPerPage), rows);
     for (row of rows) {
         const twoRooms = toShow.splice(0, 2);
         let htmlInsert = '';
@@ -37,7 +49,7 @@ leftBtn.addEventListener('click', e => {
 })
 
 rightBtn.addEventListener('click', e => {
-    if (rooms.length > rows.children.length * 2 * page) {
+    if (rooms.length > rows.length * 2 * page) {
         page++;
     }
     renderRoom(page);
