@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/kataras/iris/v12"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
@@ -8,6 +11,22 @@ import (
 
 func main() {
 	app := iris.New()
+
+	const (
+		address string = "127.0.0.1:3306"
+		dbUser string = "root"
+		dbName string = "sweetpet"
+	)
+
+	var dbEndpoint string = fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, os.Getenv("DBPASS"), address, dbName)
+
+	// temporary test password hardwired, 
+	db, _ := sql.Open("mysql", dbEndpoint)
+	defer db.Close()
+
+	var version string
+	db.QueryRow("SELECT VERSION()").Scan(&version)
+	println("Connected to:", version)
 
 	booksAPI := app.Party("/books")
 	{
