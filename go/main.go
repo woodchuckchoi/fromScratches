@@ -3,14 +3,15 @@ package main
 import (
 	"fmt"
 	"os"
+	"net/http"
 
-	"github.com/kataras/iris/v12"
+	"github.com/labstack/echo/v4"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
-	app := iris.New()
+	e := echo.New()
 
 	const (
 		address string = "127.0.0.1:3306"
@@ -28,41 +29,14 @@ func main() {
 	db.QueryRow("SELECT VERSION()").Scan(&version)
 	println("Connected to:", version)
 
-	booksAPI := app.Party("/books")
-	{
-		booksAPI.Use(iris.Compression)
+	e.GET("/", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Hello!")
+	})
 
-		booksAPI.Get("/", list)
-		booksAPI.Post("/", create)
-	}
-
-	app.Listen(":8080")
+	e.Logger.Fatal(e.Start(":8080"))
 }
 
 type Book struct {
 	Title string `json:"title"`
 }
 
-func list(ctx iris.Context) {
-	books := []Book{
-		{"Mastering Concurrency in Go"},
-		{"Go Design Patterns"},
-		{"Black Hat Go"},
-	}
-
-	ctx.JSON(books)
-}
-
-func create(ctx iris.Context) {
-	var b Book
-	err := ctx.ReadJSON(&b)
-
-	if err != nil {
-		ctx.StopWithProblem(iris.StatusBadRequest, iris.NewProblem().Title("Book creation failure").DetailErr(err))
-		return
-	}
-
-	println("Received Book: " + b.Title)
-
-	ctx.StatusCode(iris.StatusCreated)
-}
