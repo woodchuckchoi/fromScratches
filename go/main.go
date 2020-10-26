@@ -6,12 +6,22 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/woodchuckchoi/sweetpet/handler"
 )
 
 func main() {
 	e := echo.New()
+
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"}, // to modify later
+		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
+	}))
 
 	const (
 		address string = "127.0.0.1:3306"
@@ -25,9 +35,8 @@ func main() {
 	db, _ := sql.Open("mysql", dbEndpoint)
 	defer db.Close()
 
-	var version string
-	db.QueryRow("SELECT VERSION()").Scan(&version)
-	println("Connected to:", version)
+	db.SetMaxOpenConns(100)
+	db.SetMaxIdleConns(100)
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello!")
@@ -36,7 +45,6 @@ func main() {
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
-type Book struct {
-	Title string `json:"title"`
-}
 
+// 1. How does go mod or dep work?
+// 2. Directory structure for Go project?
