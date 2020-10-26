@@ -4,3 +4,4 @@ test.py
 *__pycache__*
 devqueue_env
 */test/main.go
+*/vendor
