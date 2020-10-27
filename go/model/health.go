@@ -7,16 +7,15 @@ import (
 
 type (
 	Health struct {
-		ID			int			`json:"id"`
-		UserID		int			`json:"user_id"`
-		BloodSugar	int			`json:"blood_sugar"`
-		Ts			JSONTime	`json:"ts"`
+		UserID     int      `json:"user_id"`
+		BloodSugar int      `json:"blood_sugar"`
+		Ts         JSONTime `json:"ts"`
 	}
 
 	JSONTime time.Time
 )
 
-func (t JSONTime)MarshalJSON() ([]byte, error) {
-	stamp = fmt.Sprintf("%s", time.Time(t).Format("2020-10-26 20:22:38"))
+func (t JSONTime) MarshalJSON() ([]byte, error) {
+	stamp := fmt.Sprintf("%s", time.Time(t).Format("2020-10-26 20:22:38"))
 	return []byte(stamp), nil
 }

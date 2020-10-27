@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/woodchuckchoi/sweetpet/model"
-	"github.com/google/uuid"
 )
 
 func (h *Handler) Register(c echo.Context) error {
@@ -25,3 +25,17 @@ func (h *Handler) Register(c echo.Context) error {
 	return c.JSON(http.StatusOK, u)
 }
 
+func (h *Handler) ModifyThreshold(c echo.Context) error {
+	u := new(model.User)
+	if err = c.Bind(u); err != nil {
+		return err
+	}
+
+	_, err := h.DB.Exec("UPDATE user(low, high) VALUES( ?, ?) WHERE id = ? AND uuid = ?", u.Low, u.High, u.Id, u.UUID)
+
+	if err != nil {
+		return echo.HTTPError{Code: http.StatusBadRequest, Message: err.String()}
+	}
+
+	return c.JSON(http.StatusOK, u)
+}

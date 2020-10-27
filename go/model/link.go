@@ -1,12 +1,10 @@
 package model
 
-import (
-)
+import ()
 
 type (
-	struct Link {
-		ID		int		`json:"id"`
-		UserID	int		`json:"user_id"`
-		Link	string	`json:"link"`
+	Link struct {
+		UserID int    `json:"user_id"`
+		Link   string `json:"link"`
 	}
 )
