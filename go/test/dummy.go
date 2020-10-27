@@ -37,7 +37,7 @@ func selectUser(db *sql.DB) {
 }
 
 func selectError(db *sql.DB) {
-	rows, err := db.Query("SELECT name, low, high FROM user WHERE name = 'torku makto'")
+	rows, err := db.Query("SELECT name, low, high FROM user WHERE name = 'Yalu'")
 	if err != nil {
 		fmt.Println(err)
 	}

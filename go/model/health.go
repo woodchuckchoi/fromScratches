@@ -7,7 +7,6 @@ import (
 
 type (
 	Health struct {
-		UserID     int      `json:"user_id"`
 		BloodSugar int      `json:"blood_sugar"`
 		Ts         JSONTime `json:"ts"`
 	}
