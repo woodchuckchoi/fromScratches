@@ -10,11 +10,14 @@ import (
 )
 
 func (h *Handler) Register(c echo.Context) error {
-	uid, err := uuid.NewUUID()
-	u := &model.User{UUID: uid.String()}
-	if err = c.Bind(u); err != nil {
+	u := new(model.User)
+
+	if err := c.Bind(u); err != nil {
 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "inappropriate request"}
 	}
+
+	uid, err := uuid.NewUUID()
+	u.UUID = uid.String()
 
 	if u.Name == "" || len(u.Name) > 20 {
 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: "invalid name"}
@@ -35,7 +38,7 @@ func (h *Handler) ModifyThreshold(c echo.Context) error {
 		return err
 	}
 
-	_, err := h.DB.Exec("UPDATE user(low, high) VALUES( ?, ?) WHERE uuid = ?", u.Low, u.High, u.UUID)
+	_, err := h.DB.Exec("UPDATE user SET low = ?, high = ? WHERE id = ?", u.Low, u.High, u.ID)
 
 	if err != nil {
 		return &echo.HTTPError{Code: http.StatusBadRequest, Message: err}

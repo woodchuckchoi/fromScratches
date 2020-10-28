@@ -1,10 +1,8 @@
 package handler
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
 	_ "time"
 
 	"github.com/labstack/echo/v4"
@@ -12,6 +10,7 @@ import (
 	"github.com/woodchuckchoi/sweetpet/util"
 )
 
+/*
 // RetrieveAll can use RetrieveOneDay with from 0 to timestamp MAX, need to refactor it
 // link part and retrieve data part can be separated
 func (h *Handler) RetrieveAllHealthEntries(c echo.Context) error {
@@ -45,6 +44,7 @@ func (h *Handler) RetrieveAllHealthEntries(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, Res{User: *u, Entries: healthEntries})
 }
+*/
 
 func (h *Handler) RetrieveRangedHealthEntries(c echo.Context) error {
 	var err error
@@ -54,24 +54,24 @@ func (h *Handler) RetrieveRangedHealthEntries(c echo.Context) error {
 		to   string = c.QueryParam("to")
 	)
 
-	val, err := strconv.Atoi(c.Request().Header.Get("sweetpet-id"))
-	if err != nil {
+	u := new(model.User)
+	row := h.DB.QueryRow("SELECT id, name, low, high FROM user WHERE link = ?", c.Param("link"))
+	if err := row.Scan(&u.ID, &u.Name, &u.Low, &u.High); err != nil {
 		return err
 	}
 
 	util.ToSqlTimeStamp(&from, &to)
 
-	u := model.User{ID: val}
-
 	var query string
 	if from != "" && to != "" {
-		query = fmt.Sprintf("SELECT blood_sugar, ts FROM health WHERE user_id = ? AND ts >= ? AND ts <= ? ORDER BY ts ASC", u.ID, from, to)
+		query = fmt.Sprintf("SELECT blood_sugar, ts FROM health WHERE user_id = %v AND ts >= %v AND ts <= %v ORDER BY ts ASC", u.ID, from, to)
 	} else if from != "" {
-		query = fmt.Sprintf("SELECT blood_sugar, ts FROM health WHERE user_id = ? AND ts >= ? ORDER BY ts ASC", u.ID, from)
+		query = fmt.Sprintf("SELECT blood_sugar, ts FROM health WHERE user_id = %v AND ts >= %v ORDER BY ts ASC", u.ID, from)
 	} else if to != "" {
-		query = fmt.Sprintf("SELECT blood_sugar, ts FROM health WHERE user_id = ? AND ts <= ? ORDER BY ts ASC", u.ID, to)
+		query = fmt.Sprintf("SELECT blood_sugar, ts FROM health WHERE user_id = %v AND ts <= %v ORDER BY ts ASC", u.ID, to)
 	} else {
-		query = fmt.Sprintf("SELECT blood_sugar, ts FROM health WHERE user_id = ? ORDER BY ts ASC", u.ID)
+		query = fmt.Sprintf("SELECT blood_sugar, ts FROM health WHERE user_id = %v ORDER BY ts ASC", u.ID)
+		fmt.Println("Right place")
 	}
 
 	rows, err := h.DB.Query(query)
@@ -88,5 +88,10 @@ func (h *Handler) RetrieveRangedHealthEntries(c echo.Context) error {
 		healthEntries = append(healthEntries, entry)
 	}
 
-	return c.JSON(http.StatusOK, healthEntries)
+	type Res struct {
+		User    model.User     `json:"user"`
+		Entries []model.Health `json:"entries"`
+	}
+
+	return c.JSON(http.StatusOK, Res{User: *u, Entries: healthEntries})
 }

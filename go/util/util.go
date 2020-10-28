@@ -2,6 +2,7 @@ package util
 
 import (
 	"math/rand"
+	"strings"
 )
 
 const (
@@ -17,8 +18,15 @@ func RandomString(n int) string {
 
 	return string(b)
 }
+
 func ToSqlTimeStamp(s ...*string) {
-	for _, v := range s {
-		*v // to parse
+	for i := range s {
+		if *s[i] == "" {
+			continue
+		}
+		// original s == yyyy-mm-dd_hh:mm:ss
+		// output s == "yyyy-mm-dd hh:mm:ss"
+		*s[i] = strings.Replace(*s[i], "_", " ", 1)
+		*s[i] = "\"" + *s[i] + "\""
 	}
 }
