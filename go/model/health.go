@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -14,7 +15,23 @@ type (
 	JSONTime time.Time
 )
 
+const (
+	timeLayout = "2006-01-02 15:04:05"
+)
+
 func (t JSONTime) MarshalJSON() ([]byte, error) {
-	stamp := fmt.Sprintf("%s", time.Time(t).Format("2020-10-26 20:22:38"))
+	stamp := fmt.Sprintf("\"%s\"", time.Time(t).Format("2006-01-02 15:04:05"))
 	return []byte(stamp), nil
+}
+
+func (t *JSONTime) UnmarshalJSON(b []byte) error {
+	s := strings.Trim(string(b), "\"")
+	if s == "null" {
+		*t = JSONTime(time.Time{})
+		return nil
+	}
+	defaultTime, err := time.Parse(timeLayout, s)
+	*t = JSONTime(defaultTime)
+
+	return err
 }

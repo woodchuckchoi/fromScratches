@@ -54,6 +54,35 @@ func selectError(db *sql.DB) {
 	}
 }
 
+func execTest(db *sql.DB) {
+	res, err := db.Exec("SELECT * FROM user")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(res)
+	val, _ := res.LastInsertId()
+	fmt.Println(val)
+	val, _ = res.RowsAffected()
+	fmt.Println(val)
+}
+
+func queryRow(db *sql.DB) {
+	row := db.QueryRow("SELECT id, name, uuid, low, high, link FROM user WHERE name = 'uku'")
+
+	val := struct {
+		id   int
+		name string
+		uuid string
+		low  int
+		high int
+		link string
+	}{}
+
+	row.Scan(&val.id, &val.name, &val.uuid, &val.low, &val.high, &val.link)
+	fmt.Println(val)
+}
+
 func main() {
 	const (
 		address string = "127.0.0.1:3306"
@@ -74,4 +103,8 @@ func main() {
 	selectUser(db)
 
 	selectError(db)
+
+	//execTest(db)
+
+	queryRow(db)
 }

@@ -1,19 +1,17 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"net/http"
-
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/labstack/gommon/log"
+	"github.com/woodchuckchoi/sweetpet/db"
 	"github.com/woodchuckchoi/sweetpet/handler"
+	"github.com/woodchuckchoi/sweetpet/route"
 )
 
 func main() {
 	e := echo.New()
+	e.Logger.SetLevel(log.ERROR)
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
@@ -23,28 +21,12 @@ func main() {
 		AllowMethods: []string{echo.GET, echo.HEAD, echo.PUT, echo.PATCH, echo.POST, echo.DELETE},
 	}))
 
-	const (
-		address string = "127.0.0.1:3306"
-		dbUser string = "root"
-		dbName string = "sweetpet"
-	)
-
-	var dbEndpoint string = fmt.Sprintf("%s:%s@tcp(%s)/%s", dbUser, os.Getenv("DBPASS"), address, dbName)
-
-	// temporary test password hardwired, 
-	db, _ := sql.Open("mysql", dbEndpoint)
+	db := db.Init()
 	defer db.Close()
 
-	db.SetMaxOpenConns(100)
-	db.SetMaxIdleConns(100)
+	h := &handler.Handler{DB: db}
 
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello!")
-	})
+	route.Match(e, h)
 
 	e.Logger.Fatal(e.Start(":8080"))
 }
-
-
-// 1. How does go mod or dep work?
-// 2. Directory structure for Go project?

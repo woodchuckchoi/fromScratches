@@ -17,3 +17,8 @@ func RandomString(n int) string {
 
 	return string(b)
 }
+func ToSqlTimeStamp(s ...*string) {
+	for _, v := range s {
+		*v // to parse
+	}
+}
