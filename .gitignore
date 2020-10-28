@@ -1,7 +1,7 @@
-front/template/DevBlog-Theme-master
-venv/
-test.py
+*/front/template/DevBlog-Theme-master
+*/venv/
+*/test.py
 *__pycache__*
-devqueue_env
+*/devqueue_env
 */test/main.go
 */vendor
