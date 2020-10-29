@@ -52,19 +52,46 @@ A simple tracking solution (back-end) for your pets' blood sugar levels.
 
 ### Add Entry
     URI : /api/v1/health/:link
-    Example Request
-    **In Progress**
+    Example Request 1
+    curl -X POST localhost:8080/api/v1/health/sbJRuPaDhw -H 'Content-Type: application/json' -d '{"blood_sugar": 85, "ts": "2006-01-02 15:04:05"}'
+    
+    Example Response
+    "success"
+    
+    Example Request 2
+    curl -X POST localhost:8080/api/v1/health/sbPaDhw -H 'Content-Type: application/json' -d '{"blood_sugar": 85, "ts": "2006-01-02 15:04:05"}' // Faulty Link
+    
+    Example Response
+    {"message":"Internal Server Error"}
 
 ### Modify Entry
     URI : /api/v1/health/:link/:ts
-    Example Request
-    **In Progress**
+    Example Request 1
+    curl -X PUT localhost:8080/api/v1/health/sbJRuPaDhw/2006-01-02_15:04:05 -H 'Content-Type: application/json' -d '{"blood_sugar": 55}'
+    
+    Example Response
+    "success"
+    
+    Example Request 2
+    curl -X PUT localhost:8080/api/v1/health/sbJRuPaDhw/2006-01-02_15:04:22 -H 'Content-Type: application/json' -d '{"blood_sugar": 55}'
+    
+    Example Response
+    "invalid request"
 
 ### Delete Entry
     URI : /api/v1/health/:link/:ts
-    Example Request
-    **In Progress**
-
+    Example Request 1
+    curl -X DELETE localhost:8080/api/v1/health/sbJRuPaDhw/2006-01-02_15:04:05 -H 'Content-Type: application/json'
+    
+    Example Response
+    "success"
+    
+    Example Request 2
+    curl -X DELETE localhost:8080/api/v1/health/sbJRuPaDhw/2006-01-02_15:04:05 -H 'Content-Type: application/json' // Duplicate Request
+    
+    Example Response
+    "invalid request"
+    
 ### Retrieve Entries
     URI : /api/v1/health/:link
     Example Request 1
@@ -73,4 +100,11 @@ A simple tracking solution (back-end) for your pets' blood sugar levels.
     Example Response
     {"user":{"id":1,"name":"Test","low":50,"high":120},"entries":[{"blood_sugar":150,"ts":"2020-10-28 07:28:23"},{"blood_sugar":120,"ts":"2020-10-28 07:28:26"},{"blood_sugar":110,"ts":"2020-10-28 07:28:29"},{"blood_sugar":130,"ts":"2020-10-28 07:28:31"},{"blood_sugar":200,"ts":"2020-10-28 07:28:35"},{"blood_sugar":160,"ts":"2020-10-28 07:28:41"},{"blood_sugar":140,"ts":"2020-10-28 07:28:44"},{"blood_sugar":110,"ts":"2020-10-28 07:28:47"},{"blood_sugar":80,"ts":"2020-10-28 07:28:50"}]}
 
-## To Add
+# ENV
+MYSQL   8.0.21 / Docker Container
+GO      1.5.3
+OS      UBUNTU(20.03)
+ARCH    AMD64
+
+# To Add
+TLS, HTTP2

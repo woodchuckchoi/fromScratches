@@ -3,7 +3,6 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	_ "time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/woodchuckchoi/sweetpet/model"
@@ -94,4 +93,64 @@ func (h *Handler) RetrieveRangedHealthEntries(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, Res{User: *u, Entries: healthEntries})
+}
+
+func (h *Handler) CommitEntry(c echo.Context) error {
+	link := c.Param("link")
+
+	health := new(model.Health)
+
+	if err := c.Bind(health); err != nil {
+		return err
+	}
+
+	_, err := h.DB.Exec("INSERT INTO health(user_id, blood_sugar, ts) VALUES( (SELECT id FROM user WHERE link = ?), ?, ? ) ", link, health.BloodSugar, health.Ts.ToString())
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, "success")
+}
+
+func (h *Handler) DeleteEntry(c echo.Context) error {
+	link := c.Param("link")
+	ts := c.Param("ts")
+
+	util.ToSqlTimeStamp(&ts)
+
+	query := fmt.Sprintf("DELETE FROM health WHERE user_id = (SELECT id FROM user WHERE link = '%v') AND ts = %v", link, ts)
+	res, err := h.DB.Exec(query)
+	if err != nil {
+		return err
+	}
+
+	if val, _ := res.RowsAffected(); val > 0 {
+		return c.JSON(http.StatusOK, "success")
+	}
+
+	return c.JSON(http.StatusBadRequest, "invalid request")
+}
+
+func (h *Handler) ModifyEntry(c echo.Context) error {
+	link := c.Param("link")
+	ts := c.Param("ts")
+
+	util.ToSqlTimeStamp(&ts)
+
+	health := new(model.Health)
+	if err := c.Bind(health); err != nil {
+		return err
+	}
+
+	query := fmt.Sprintf("UPDATE health SET blood_sugar = %v WHERE user_id = (SELECT id FROM user WHERE link = '%v') AND ts = %v", health.BloodSugar, link, ts)
+	res, err := h.DB.Exec(query)
+	if err != nil {
+		return err
+	}
+
+	if val, _ := res.RowsAffected(); val > 0 {
+		return c.JSON(http.StatusOK, "success")
+	}
+
+	return c.JSON(http.StatusBadRequest, "invalid request")
 }

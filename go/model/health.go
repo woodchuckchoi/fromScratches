@@ -26,12 +26,15 @@ func (t JSONTime) MarshalJSON() ([]byte, error) {
 
 func (t *JSONTime) UnmarshalJSON(b []byte) error {
 	s := strings.Trim(string(b), "\"")
-	if s == "null" {
-		*t = JSONTime(time.Time{})
-		return nil
-	}
 	defaultTime, err := time.Parse(timeLayout, s)
+	if err != nil {
+		return err
+	}
 	*t = JSONTime(defaultTime)
 
 	return err
+}
+
+func (t *JSONTime) ToString() string {
+	return time.Time(*t).Format("2006-01-02 15:04:05")
 }

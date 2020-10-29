@@ -55,15 +55,13 @@ func selectError(db *sql.DB) {
 }
 
 func execTest(db *sql.DB) {
-	res, err := db.Exec("SELECT * FROM user")
+	res, err := db.Exec("INSERT INTO health(user_id, blood_sugar, ts) VALUES(3, 50, \"2020-10-30 00:00:00\")")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	fmt.Println(res)
-	val, _ := res.LastInsertId()
-	fmt.Println(val)
-	val, _ = res.RowsAffected()
+	val, _ := res.RowsAffected()
 	fmt.Println(val)
 }
 
@@ -100,11 +98,11 @@ func main() {
 	db.SetMaxIdleConns(100)
 
 	//createUser(db)
-	selectUser(db)
+	//selectUser(db)
 
-	selectError(db)
+	//selectError(db)
 
-	//execTest(db)
+	execTest(db)
 
-	queryRow(db)
+	//queryRow(db)
 }
