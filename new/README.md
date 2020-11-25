@@ -1,6 +1,6 @@
 # workflow
 URI, depth, keyword 갯수를 입력하면 backend는 goroutine 생성
-Queue (SQS? RabbitMQ? Redis?)에 작업 queueing
+Queue (SQS? RabbitMQ? Redis?)에 작업 queueing -> chan 사용하자
 worker(Crawler)는 semaphore를 통해 최대한의 goroutine을 생성하며 데이터 크롤링 후 topic 추출(AWS? 자체 NLP?)
 추출한 keyword visualisation
 
