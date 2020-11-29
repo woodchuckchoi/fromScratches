@@ -2,30 +2,24 @@ package controller
 
 import (
 	"log"
+	"net/http"
 
 	"github.com/labstack/echo/v4"
 	myerr "github.com/woodchuckchoi/fromScratches/src/core/err"
 	"github.com/woodchuckchoi/fromScratches/src/core/model"
+	"github.com/woodchuckchoi/fromScratches/src/core/service"
 )
 
 func requestAnalytics(c echo.Context) error {
 	list := []model.Crop{}
+	resp := []model.Harvest{}
 
 	if err := c.Bind(list); err != nil {
 		log.Fatal(err)
 		return myerr.InvalidParameterError
 	}
-	var resReceiver = make(<-chan model.Harvest, len(list))
 
-	for _, crop := range list {
-		go func(c model.Crop, receiver <-chan model.Harvest) {
+	resp = service.RequestAnalytics(list)
 
-		}(crop, resReceiver)
-	}
-
-	select {
-	case h := <-resReceiver:
-
-	}
-	return nil
+	return c.JSON(http.StatusOK, resp)
 }
