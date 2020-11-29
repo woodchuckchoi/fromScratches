@@ -1,31 +1,31 @@
 package controller
 
 import (
+	"log"
+
 	"github.com/labstack/echo/v4"
+	myerr "github.com/woodchuckchoi/fromScratches/src/core/err"
+	"github.com/woodchuckchoi/fromScratches/src/core/model"
 )
 
 func requestAnalytics(c echo.Context) error {
+	list := []model.Crop{}
 
-	uris := c.FormValue("uris")
-	keys := c.FormValue("keys")
-	deps := c.FormValue("deps")
+	if err := c.Bind(list); err != nil {
+		log.Fatal(err)
+		return myerr.InvalidParameterError
+	}
+	var resReceiver = make(<-chan model.Harvest, len(list))
 
-	if func(args ...[]interface{}) error {
-		if len(args) == 0 {
-			return error
-		}
+	for _, crop := range list {
+		go func(c model.Crop, receiver <-chan model.Harvest) {
 
-		cnt := len(args[0])
-
-		for idx := 1; idx < len(args); idx++ {
-			if cnt != len(args[idx]) {
-				return error
-			}
-		}
-
-		return nil
-	}(uris, keys, deps) != nil {
-
+		}(crop, resReceiver)
 	}
 
+	select {
+	case h := <-resReceiver:
+
+	}
+	return nil
 }
