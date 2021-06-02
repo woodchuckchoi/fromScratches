@@ -25,6 +25,6 @@ sanic-session==0.7.3
 six==1.15.0
 sniffio==1.1.0
 ujson==3.1.0
-urllib3==1.25.10
+urllib3==1.26.5
 uvloop==0.14.0
 websockets==8.1
